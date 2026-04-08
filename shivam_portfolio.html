@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shivam Mishra | Mechanical Design Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Barlow:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --steel: #1a1f2e;
+    --deep: #0d1117;
+    --accent: #e8a020;
+    --accent2: #4fc3f7;
+    --gear: #2a3245;
+    --text: #c9d1d9;
+    --light: #f0f6fc;
+    --dim: #6e7681;
+    --red: #ff6b35;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--deep);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    overflow-x: hidden;
+  }
+
+  #bg-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    opacity: 0.18;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 48px;
+    background: rgba(13,17,23,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(232,160,32,0.2);
+  }
+
+  .nav-logo {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.1rem;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .nav-links { display: flex; gap: 36px; }
+  .nav-links a {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--dim);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--accent);
+    transition: width 0.3s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-links a:hover::after { width: 100%; }
+
+  /* ---- HERO ---- */
+  #hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 0 80px;
+    z-index: 1;
+    overflow: hidden;
+    gap: 60px;
+  }
+
+  .hero-content { max-width: 580px; flex-shrink: 0; }
+
+  .hero-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent2);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero-tag::before {
+    content: '';
+    width: 40px; height: 1px;
+    background: var(--accent2);
+  }
+
+  h1.name {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(2.8rem, 5vw, 4.8rem);
+    font-weight: 900;
+    line-height: 1.05;
+    color: var(--light);
+    letter-spacing: -0.02em;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+  h1.name span { color: var(--accent); }
+
+  .hero-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    margin: 18px 0 28px;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  .hero-desc {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--dim);
+    max-width: 500px;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 40px;
+    margin-top: 48px;
+    animation: fadeUp 0.8s 0.4s ease both;
+  }
+  .stat-item { text-align: left; }
+  .stat-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--accent);
+    display: block;
+  }
+  .stat-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 16px;
+    margin-top: 40px;
+    animation: fadeUp 0.8s 0.5s ease both;
+  }
+
+  .btn-primary {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 14px 32px;
+    background: var(--accent);
+    color: var(--deep);
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .btn-primary:hover { background: #ffc046; transform: translateY(-2px); }
+
+  .btn-secondary {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 14px 32px;
+    background: transparent;
+    color: var(--accent2);
+    border: 1px solid var(--accent2);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s;
+  }
+  .btn-secondary:hover { background: rgba(79,195,247,0.1); transform: translateY(-2px); }
+
+  /* ---- PROFILE PHOTO ---- */
+  .hero-profile {
+    position: relative;
+    flex-shrink: 0;
+    animation: fadeUp 0.8s 0.35s ease both;
+    margin-left: auto;
+    margin-right: 60px;
+  }
+
+  .profile-frame {
+    position: relative;
+    width: 280px;
+    height: 280px;
+  }
+
+  .profile-frame::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border: 2px solid transparent;
+    border-top-color: var(--accent);
+    border-right-color: var(--accent);
+    border-radius: 50%;
+    animation: spinBorder 4s linear infinite;
+  }
+  .profile-frame::after {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border: 1px solid transparent;
+    border-bottom-color: var(--accent2);
+    border-left-color: var(--accent2);
+    border-radius: 50%;
+    animation: spinBorder 7s linear infinite reverse;
+  }
+
+  .profile-img-wrap {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid rgba(232,160,32,0.3);
+    background: var(--gear);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .profile-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Placeholder shown when no image src */
+  .profile-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--dim);
+  }
+  .profile-placeholder svg { width: 72px; height: 72px; opacity: 0.5; }
+  .profile-placeholder span {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  .profile-badge {
+    position: absolute;
+    bottom: 10px;
+    right: -10px;
+    background: var(--gear);
+    border: 1px solid rgba(232,160,32,0.35);
+    padding: 8px 14px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .profile-badge::before {
+    content: '▸ ';
+    opacity: 0.7;
+  }
+
+  @keyframes spinBorder {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Corner brackets decorating the photo */
+  .profile-corner {
+    position: absolute;
+    width: 20px; height: 20px;
+    border-color: var(--accent);
+    border-style: solid;
+    border-width: 0;
+  }
+  .profile-corner.tl { top: -14px; left: -14px; border-top-width: 2px; border-left-width: 2px; }
+  .profile-corner.tr { top: -14px; right: -14px; border-top-width: 2px; border-right-width: 2px; }
+  .profile-corner.bl { bottom: -14px; left: -14px; border-bottom-width: 2px; border-left-width: 2px; }
+  .profile-corner.br { bottom: -14px; right: -14px; border-bottom-width: 2px; border-right-width: 2px; }
+
+  .hero-graphic {
+    position: absolute;
+    right: -60px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 520px;
+    height: 520px;
+    opacity: 0.12;
+    animation: rotateSlow 30s linear infinite;
+    pointer-events: none;
+  }
+
+  /* ---- SECTION BASE ---- */
+  section {
+    position: relative;
+    z-index: 1;
+    padding: 100px 80px;
+  }
+
+  .section-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent2);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .section-label::before {
+    content: '';
+    width: 30px; height: 1px;
+    background: var(--accent2);
+  }
+
+  .section-title {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    font-weight: 700;
+    color: var(--light);
+    margin-bottom: 60px;
+    letter-spacing: -0.01em;
+  }
+  .section-title span { color: var(--accent); }
+
+  /* ---- SKILLS ---- */
+  #skills { background: rgba(26,31,46,0.6); }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+
+  .skill-card {
+    background: rgba(42,50,69,0.5);
+    border: 1px solid rgba(232,160,32,0.12);
+    padding: 28px;
+    transition: all 0.4s;
+    position: relative;
+    overflow: hidden;
+  }
+  .skill-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--accent);
+    transform: scaleY(0);
+    transition: transform 0.3s;
+    transform-origin: bottom;
+  }
+  .skill-card:hover::before { transform: scaleY(1); }
+  .skill-card:hover {
+    border-color: rgba(232,160,32,0.35);
+    transform: translateY(-4px);
+    background: rgba(42,50,69,0.8);
+  }
+
+  .skill-card-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .skill-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.68rem;
+    padding: 4px 10px;
+    background: rgba(232,160,32,0.08);
+    border: 1px solid rgba(232,160,32,0.2);
+    color: var(--text);
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+  }
+  .skill-tag:hover {
+    background: rgba(232,160,32,0.18);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* ---- EXPERIENCE ---- */
+  .exp-timeline {
+    position: relative;
+    padding-left: 40px;
+  }
+  .exp-timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+  }
+
+  .exp-item {
+    position: relative;
+    margin-bottom: 60px;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: all 0.6s ease;
+  }
+  .exp-item.visible { opacity: 1; transform: translateX(0); }
+
+  .exp-item::before {
+    content: '';
+    position: absolute;
+    left: -46px; top: 6px;
+    width: 12px; height: 12px;
+    border: 2px solid var(--accent);
+    background: var(--deep);
+    border-radius: 0;
+    transform: rotate(45deg);
+  }
+
+  .exp-date {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent2);
+    letter-spacing: 0.12em;
+    margin-bottom: 8px;
+  }
+
+  .exp-role {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.1rem;
+    color: var(--light);
+    margin-bottom: 4px;
+  }
+
+  .exp-company {
+    font-size: 0.85rem;
+    color: var(--accent);
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+
+  .exp-desc { font-size: 0.9rem; line-height: 1.7; color: var(--dim); }
+  .exp-desc li {
+    list-style: none;
+    padding: 4px 0;
+    padding-left: 16px;
+    position: relative;
+  }
+  .exp-desc li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 0.65rem;
+    top: 5px;
+  }
+
+  /* ---- PROJECTS ---- */
+  #projects { background: rgba(13,17,23,0.8); }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+  }
+
+  .project-card {
+    background: rgba(26,31,46,0.7);
+    border: 1px solid rgba(79,195,247,0.1);
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s;
+    cursor: default;
+  }
+  .project-card::after {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(232,160,32,0.04) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .project-card:hover::after { opacity: 1; }
+  .project-card:hover {
+    border-color: rgba(79,195,247,0.3);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  }
+
+  .project-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.65rem;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    margin-bottom: 12px;
+    opacity: 0.7;
+  }
+
+  .project-name {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.95rem;
+    color: var(--light);
+    margin-bottom: 12px;
+    line-height: 1.4;
+  }
+
+  .project-desc {
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: var(--dim);
+    margin-bottom: 20px;
+  }
+
+  .project-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .project-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem;
+    padding: 3px 8px;
+    background: rgba(79,195,247,0.08);
+    border: 1px solid rgba(79,195,247,0.2);
+    color: var(--accent2);
+    letter-spacing: 0.05em;
+  }
+
+  /* ---- PERSONAL PROJECTS — distinct accent strip ---- */
+  #personal-projects {
+    background: rgba(26,31,46,0.65);
+  }
+
+  .personal-projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 28px;
+  }
+
+  .pp-card {
+    background: rgba(13,17,23,0.7);
+    border: 1px solid rgba(232,160,32,0.18);
+    padding: 36px 32px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s;
+  }
+  .pp-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(to right, var(--accent), var(--accent2));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s;
+  }
+  .pp-card:hover::before { transform: scaleX(1); }
+  .pp-card:hover {
+    border-color: rgba(232,160,32,0.4);
+    transform: translateY(-6px);
+    box-shadow: 0 24px 48px rgba(0,0,0,0.5);
+  }
+
+  .pp-badge {
+    display: inline-block;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    background: rgba(232,160,32,0.12);
+    border: 1px solid rgba(232,160,32,0.3);
+    color: var(--accent);
+    margin-bottom: 18px;
+  }
+
+  .pp-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--light);
+    margin-bottom: 14px;
+    line-height: 1.35;
+  }
+
+  .pp-desc {
+    font-size: 0.88rem;
+    line-height: 1.8;
+    color: var(--dim);
+    margin-bottom: 24px;
+  }
+
+  .pp-highlights {
+    margin-bottom: 24px;
+    list-style: none;
+  }
+  .pp-highlights li {
+    font-size: 0.84rem;
+    line-height: 1.65;
+    color: var(--text);
+    padding: 5px 0 5px 18px;
+    position: relative;
+    border-bottom: 1px solid rgba(232,160,32,0.07);
+  }
+  .pp-highlights li:last-child { border-bottom: none; }
+  .pp-highlights li::before {
+    content: '◆';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 0.5rem;
+    top: 8px;
+  }
+
+  .pp-concept-box {
+    background: rgba(232,160,32,0.06);
+    border: 1px solid rgba(232,160,32,0.15);
+    border-left: 3px solid var(--accent);
+    padding: 14px 16px;
+    margin-bottom: 22px;
+  }
+  .pp-concept-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .pp-concept-text {
+    font-size: 0.84rem;
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  .pp-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pp-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.62rem;
+    padding: 4px 10px;
+    background: rgba(232,160,32,0.08);
+    border: 1px solid rgba(232,160,32,0.22);
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+  }
+  .pp-tag:hover {
+    background: rgba(232,160,32,0.2);
+    color: var(--light);
+  }
+
+  /* Penta-wheel diagram inside card */
+  .pp-diagram {
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ---- CONTACT ---- */
+  #contact {
+    background: rgba(26,31,46,0.5);
+    text-align: center;
+  }
+  .contact-inner { max-width: 600px; margin: 0 auto; }
+
+  .contact-links {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+
+  .contact-link {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    border: 1px solid rgba(232,160,32,0.3);
+    color: var(--text);
+    text-decoration: none;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .contact-link:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(232,160,32,0.05);
+  }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 30px;
+    border-top: 1px solid rgba(232,160,32,0.1);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes rotateSlow {
+    from { transform: translateY(-50%) rotate(0deg); }
+    to { transform: translateY(-50%) rotate(360deg); }
+  }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--deep); }
+  ::-webkit-scrollbar-thumb { background: var(--accent); }
+
+  .certs-grid { display: flex; flex-wrap: wrap; gap: 16px; }
+  .cert-pill {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    padding: 10px 18px;
+    border: 1px solid rgba(232,160,32,0.2);
+    color: var(--text);
+    background: rgba(42,50,69,0.4);
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+  }
+  .cert-pill:hover {
+    border-color: var(--accent);
+    background: rgba(232,160,32,0.06);
+    color: var(--accent);
+  }
+  .cert-pill .cert-icon { color: var(--accent); }
+
+  .award-banner {
+    margin-top: 40px;
+    padding: 20px 28px;
+    border: 1px solid rgba(255,107,53,0.3);
+    background: rgba(255,107,53,0.04);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .award-banner .award-icon { font-size: 1.5rem; }
+  .award-text { font-size: 0.88rem; color: var(--text); line-height: 1.6; }
+  .award-text strong { color: var(--red); font-family: 'Orbitron', monospace; font-size: 0.8rem; }
+
+  .hex-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-image:
+      repeating-linear-gradient(60deg, rgba(232,160,32,0.015) 0px, transparent 1px, transparent 60px, rgba(232,160,32,0.015) 61px),
+      repeating-linear-gradient(-60deg, rgba(232,160,32,0.015) 0px, transparent 1px, transparent 60px, rgba(232,160,32,0.015) 61px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .scanline {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(to right, transparent, rgba(232,160,32,0.4), transparent);
+    z-index: 200;
+    animation: scanDown 8s linear infinite;
+    pointer-events: none;
+  }
+  @keyframes scanDown {
+    from { top: 0; }
+    to { top: 100vh; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    section { padding: 70px 24px; }
+    #hero { padding: 100px 24px 60px; flex-direction: column; gap: 40px; }
+    .hero-graphic { display: none; }
+    .hero-stats { gap: 24px; }
+    .hero-profile { margin: 0 auto; }
+    .profile-frame { width: 200px; height: 200px; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+<div class="hex-overlay"></div>
+<div class="scanline"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">SM // Design</div>
+  <div class="nav-links">
+    <a href="#skills">Skills</a>
+    <a href="#experience">Experience</a>
+    <a href="#projects">Projects</a>
+    <a href="#personal-projects">Personal</a>
+    <a href="#certs">Certifications</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-content">
+    <div class="hero-tag">Mechanical Design Engineer</div>
+    <h1 class="name">Shivam<br><span>Mishra</span></h1>
+    <p class="hero-title">// SR. DESIGN ENGINEER — L&T TECHNOLOGY SERVICES</p>
+    <p class="hero-desc">
+      Mechanical engineer specialising in off-highway vehicles, mining equipment, industrial systems, and electric mobility — from concept to production-ready designs.
+    </p>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-num">3.5+</span>
+        <span class="stat-label">Years Exp.</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">80kg</span>
+        <span class="stat-label">Weight Saved</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">6+</span>
+        <span class="stat-label">CAD Tools</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">2×</span>
+        <span class="stat-label">Star Award</span>
+      </div>
+    </div>
+    <div class="hero-btns">
+      <a href="#projects" class="btn-primary">View Projects</a>
+      <a href="#contact" class="btn-secondary">Get In Touch</a>
+    </div>
+  </div>
+
+  <!-- ======== PROFILE PHOTO ======== -->
+  <div class="hero-profile">
+    <div class="profile-frame">
+      <div class="profile-corner tl"></div>
+      <div class="profile-corner tr"></div>
+      <div class="profile-corner bl"></div>
+      <div class="profile-corner br"></div>
+      <div class="profile-img-wrap">
+        <!--
+          TO ADD YOUR PHOTO:
+          Replace the placeholder below with:
+          <img src="your-photo.jpg" alt="Shivam Mishra">
+        -->
+        <div class="profile-placeholder">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="40" cy="30" r="16" stroke="#e8a020" stroke-width="1.5"/>
+            <path d="M10 72c0-16.569 13.431-30 30-30s30 13.431 30 30" stroke="#e8a020" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <span>Add your<br>photo here</span>
+        </div>
+      </div>
+      <div class="profile-badge">Vadodara, Gujarat</div>
+    </div>
+  </div>
+
+  <!-- Rotating gear SVG (decorative) -->
+  <svg class="hero-graphic" viewBox="0 0 520 520" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="gGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#e8a020;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#4fc3f7;stop-opacity:0.3" />
+      </linearGradient>
+    </defs>
+    <g transform="translate(260,260)">
+      <circle r="180" fill="none" stroke="url(#gGrad)" stroke-width="1.5" stroke-dasharray="8 6"/>
+      <circle r="130" fill="none" stroke="rgba(232,160,32,0.4)" stroke-width="1"/>
+      <circle r="60" fill="none" stroke="rgba(79,195,247,0.4)" stroke-width="1.5"/>
+      <circle r="18" fill="rgba(232,160,32,0.2)" stroke="var(--accent)" stroke-width="1.5"/>
+      <line x1="0" y1="-180" x2="0" y2="180" stroke="rgba(232,160,32,0.1)" stroke-width="1"/>
+      <line x1="-180" y1="0" x2="180" y2="0" stroke="rgba(232,160,32,0.1)" stroke-width="1"/>
+      <line x1="-127" y1="-127" x2="127" y2="127" stroke="rgba(232,160,32,0.08)" stroke-width="1"/>
+      <line x1="127" y1="-127" x2="-127" y2="127" stroke="rgba(232,160,32,0.08)" stroke-width="1"/>
+      <g stroke="rgba(232,160,32,0.6)" stroke-width="2" fill="none">
+        <rect x="-8" y="-196" width="16" height="20" rx="1"/>
+        <rect x="-8" y="176" width="16" height="20" rx="1"/>
+        <rect x="-196" y="-8" width="20" height="16" rx="1"/>
+        <rect x="176" y="-8" width="20" height="16" rx="1"/>
+        <rect x="-145" y="-148" width="14" height="20" rx="1" transform="rotate(-45,-138,-138)"/>
+        <rect x="130" y="-148" width="14" height="20" rx="1" transform="rotate(45,138,-138)"/>
+        <rect x="-145" y="128" width="14" height="20" rx="1" transform="rotate(45,-138,138)"/>
+        <rect x="130" y="128" width="14" height="20" rx="1" transform="rotate(-45,138,138)"/>
+      </g>
+      <line x1="-60" y1="0" x2="60" y2="0" stroke="rgba(79,195,247,0.5)" stroke-width="1"/>
+      <line x1="0" y1="-60" x2="0" y2="60" stroke="rgba(79,195,247,0.5)" stroke-width="1"/>
+      <circle cx="180" cy="0" r="4" fill="var(--accent)"/>
+      <circle cx="-180" cy="0" r="4" fill="var(--accent)"/>
+      <circle cx="0" cy="180" r="4" fill="var(--accent2)"/>
+      <circle cx="0" cy="-180" r="4" fill="var(--accent2)"/>
+    </g>
+  </svg>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-label">Technical Arsenal</div>
+  <h2 class="section-title">Core <span>Skills</span></h2>
+  <div class="skills-grid">
+    <div class="skill-card">
+      <div class="skill-card-title">⚙ CAD Software</div>
+      <div class="skill-tags">
+        <span class="skill-tag">SolidWorks</span>
+        <span class="skill-tag">UGNX</span>
+        <span class="skill-tag">Autodesk Inventor</span>
+        <span class="skill-tag">Creo</span>
+        <span class="skill-tag">Catia V5</span>
+        <span class="skill-tag">AutoCAD</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-title">🔩 Design Competencies</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Sheet Metal</span>
+        <span class="skill-tag">Casting</span>
+        <span class="skill-tag">Plastics</span>
+        <span class="skill-tag">Welded Structures</span>
+        <span class="skill-tag">Bolted Joints</span>
+        <span class="skill-tag">Piping</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-title">📐 Standards & Methods</div>
+      <div class="skill-tags">
+        <span class="skill-tag">GD&T / ASME Y14.5</span>
+        <span class="skill-tag">Tolerance Stack-up</span>
+        <span class="skill-tag">DFM / DFA</span>
+        <span class="skill-tag">VAVE</span>
+        <span class="skill-tag">NPD / CPI</span>
+        <span class="skill-tag">ECN/ECR</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-title">🔍 Engineering Analysis</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Teardown Analysis</span>
+        <span class="skill-tag">Benchmarking</span>
+        <span class="skill-tag">Reverse Engineering</span>
+        <span class="skill-tag">Load/Drag Testing</span>
+        <span class="skill-tag">BOM Management</span>
+        <span class="skill-tag">Point Cloud Modeling</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-title">📋 Compliance</div>
+      <div class="skill-tags">
+        <span class="skill-tag">AWS D1.1</span>
+        <span class="skill-tag">ISO Standards</span>
+        <span class="skill-tag">ADR 62 1/2</span>
+        <span class="skill-tag">AS 1101.3</span>
+        <span class="skill-tag">Autodesk Vault PDM</span>
+        <span class="skill-tag">Oracle JD Edwards</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-title">🏭 Domains</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Off-Highway Vehicles</span>
+        <span class="skill-tag">Mining Equipment</span>
+        <span class="skill-tag">Agricultural Machinery</span>
+        <span class="skill-tag">Industrial Skids</span>
+        <span class="skill-tag">EV / Electric</span>
+        <span class="skill-tag">Service Cranes</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label">Professional Journey</div>
+  <h2 class="section-title">Work <span>Experience</span></h2>
+  <div class="exp-timeline">
+
+    <div class="exp-item">
+      <div class="exp-date">SEPT 2022 — PRESENT</div>
+      <div class="exp-role">Sr. Design Engineer</div>
+      <div class="exp-company">L&T Technology Services Ltd. — Vadodara, Gujarat</div>
+      <ul class="exp-desc">
+        <li>Design and engineering for off-highway vehicles, mining trailers, service cranes, industrial skids, and formwork systems per international standards (ASME, AWS D1.1, ISO, ADR 62½, AS 1101.3).</li>
+        <li>Executed design changes and production corrections in sheet metal, casting and assembly; reviewed and updated ECNs/ECRs per quality and manufacturing standards.</li>
+        <li>Created CAD models, BOMs, fabrication and GA drawings using SolidWorks, Inventor, Creo, AutoCAD &amp; UGNX.</li>
+        <li>Applied DFM/DFA concepts achieving 80 kg weight reduction in crane design and eliminating 5 components.</li>
+        <li>Conducted technical teardown, benchmarking, and VAVE on tractors, cranes, and EV scooters including drag/load/speed tests.</li>
+      </ul>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-date">NOV 2021 — JUNE 2022</div>
+      <div class="exp-role">Engineering Intern</div>
+      <div class="exp-company">Alpla India Pvt. Ltd. — Silvassa, Daman and Diu</div>
+      <ul class="exp-desc">
+        <li>Supervised injection molding and injection stretch blow operations, focusing on process optimisation and zero-defect production.</li>
+        <li>Managed daily shift operations and production targets for Motul and Johnson &amp; Johnson product lines.</li>
+        <li>Led molding process troubleshooting: cut defect rate by 20% and raised daily production output by 25%.</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROFESSIONAL PROJECTS -->
+<section id="projects">
+  <div class="section-label">Featured Work</div>
+  <h2 class="section-title">Key <span>Projects</span></h2>
+  <div class="projects-grid">
+
+    <div class="project-card">
+      <span class="project-num">PROJECT // 01</span>
+      <div class="project-name">Sweeper Truck ECN/ECR — Off-Highway Vehicle</div>
+      <p class="project-desc">Production-driven design corrections in sheet metal, casting, and assemblies. Maintained design documents using Autodesk Vault (PDM) integrated with Oracle JD Edwards.</p>
+      <div class="project-tags">
+        <span class="project-tag">SolidWorks</span>
+        <span class="project-tag">Sheet Metal</span>
+        <span class="project-tag">GD&T</span>
+        <span class="project-tag">PDM</span>
+        <span class="project-tag">ECN/ECR</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <span class="project-num">PROJECT // 02</span>
+      <div class="project-name">Tandem Axle Trailer — Mining NPD (Australia)</div>
+      <p class="project-desc">Full chassis design including fenders, axle mounting, headworks, canopy, guardrails and catwalks per Australian standards. Axle positioning, V-load, and CG analysis included.</p>
+      <div class="project-tags">
+        <span class="project-tag">Autodesk Inventor</span>
+        <span class="project-tag">ADR 62½</span>
+        <span class="project-tag">DFM/DFA</span>
+        <span class="project-tag">AS 1101.3</span>
+        <span class="project-tag">NPD</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <span class="project-num">PROJECT // 03</span>
+      <div class="project-name">4-Ton Telescopic Service Crane — VAVE &amp; Weight Optimisation</div>
+      <p class="project-desc">Engineered column, boom, cradle, and load block. Benchmarked two cranes, proposed VAVE ideas to cut 80 kg and eliminate 5 components. Manufactured drawings in Creo 10.</p>
+      <div class="project-tags">
+        <span class="project-tag">Creo 10</span>
+        <span class="project-tag">VAVE</span>
+        <span class="project-tag">Benchmarking</span>
+        <span class="project-tag">GD&T</span>
+        <span class="project-tag">DFM/DFA</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <span class="project-num">PROJECT // 04</span>
+      <div class="project-name">Tractor &amp; EV Scooter Teardown &amp; Benchmarking</div>
+      <p class="project-desc">Detailed teardown of 2 CAB tractors, 1 ROPS tractor, and 3 EV scooters. Drag/load/speed tests, BOM generation, pre-teardown reports, technical benchmarking, and VAVE feasibility studies.</p>
+      <div class="project-tags">
+        <span class="project-tag">Teardown</span>
+        <span class="project-tag">VAVE</span>
+        <span class="project-tag">Benchmarking</span>
+        <span class="project-tag">EV</span>
+        <span class="project-tag">BOM</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <span class="project-num">PROJECT // 05</span>
+      <div class="project-name">Reverse Engineering — Rock Breaker, Dozer Blade &amp; More</div>
+      <p class="project-desc">Managed team for RE projects on Hydraulic Rock Breaker, Dozer Blade, Mud Balance Box, and Adjustable Scaffolding Props. CAD from point cloud data, CMM, wire cutting, and 3D scanning.</p>
+      <div class="project-tags">
+        <span class="project-tag">Point Cloud</span>
+        <span class="project-tag">3D Scanning</span>
+        <span class="project-tag">CMM</span>
+        <span class="project-tag">CAD Modeling</span>
+        <span class="project-tag">GD&T</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <span class="project-num">PROJECT // 06</span>
+      <div class="project-name">Carbon Capture Skid — Industrial Flue Gas System</div>
+      <p class="project-desc">Built carbon capture skid from P&amp;ID and process flow diagrams. Created CAD models for equipment, piping, and structural components. Delivered BOM, fabrication drawings, GA drawings, and rendered images.</p>
+      <div class="project-tags">
+        <span class="project-tag">P&ID</span>
+        <span class="project-tag">Piping Design</span>
+        <span class="project-tag">Structural</span>
+        <span class="project-tag">Rendering</span>
+        <span class="project-tag">GA Drawings</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     PERSONAL PROJECTS
+     ============================================================ -->
+<section id="personal-projects">
+  <div class="section-label">Innovation Beyond Work</div>
+  <h2 class="section-title">Personal <span>Projects</span></h2>
+
+  <div class="personal-projects-grid">
+
+    <!-- ---- STAIR-CLIMBING WHEELCHAIR ---- -->
+    <div class="pp-card">
+      <div class="pp-badge">🏆 Academic Design Project</div>
+      <div class="pp-title">Stair-Climbing Wheelchair — Design &amp; Manufacturing</div>
+
+      <p class="pp-desc">
+        A fully functional stair-climbing wheelchair engineered to restore independent mobility for physically challenged individuals on staircases and uneven terrain — surfaces that conventional wheelchairs cannot navigate. The project covered the full product development cycle from concept ideation and mechanical design to fabrication, assembly, and performance testing.
+      </p>
+
+      <!-- Core Concept Box -->
+      <div class="pp-concept-box">
+        <div class="pp-concept-label">⚙ Core Concept — Penta Wheel (Pentagonal Wheel) Mechanism</div>
+        <div class="pp-concept-text">
+          The wheelchair uses a <strong style="color:var(--accent)">Penta Wheel (pentagonal / five-spoke star wheel)</strong> arrangement in place of conventional circular wheels. Five small wheels are mounted radially at equal angular spacing (72° apart) around a central hub, forming a pentagonal profile. As the assembly rotates, successive wheels contact and step up stair edges — delivering a rolling-over-steps action with a near-smooth ride and minimal jerk. The geometry is optimised so at least one wheel is always in flat contact with a step surface, ensuring continuous traction and stability throughout the climb.
+        </div>
+      </div>
+
+      <!-- Penta-wheel diagram -->
+      <div class="pp-diagram">
+        <svg viewBox="0 0 320 240" width="320" height="240" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="pw-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+              <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </marker>
+          </defs>
+
+          <!-- Stair steps outline -->
+          <polyline points="0,220 100,220 100,180 200,180 200,140 320,140"
+            fill="none" stroke="rgba(79,195,247,0.3)" stroke-width="1.5" stroke-dasharray="5,4"/>
+          <!-- Step fill hints -->
+          <rect x="0" y="220" width="100" height="20" fill="rgba(79,195,247,0.06)"/>
+          <rect x="100" y="180" width="100" height="40" fill="rgba(79,195,247,0.06)"/>
+          <rect x="200" y="140" width="120" height="40" fill="rgba(79,195,247,0.06)"/>
+
+          <!-- Central hub of penta wheel at stair 1 -->
+          <circle cx="82" cy="188" r="5" fill="rgba(232,160,32,0.3)" stroke="#e8a020" stroke-width="1.2"/>
+
+          <!-- 5 spoke-wheels at 72° intervals (r_spoke=42, small wheel r=11) -->
+          <!-- Spoke angles: 270°(top), 342°, 54°, 126°, 198° → rad values -->
+          <!-- Spoke tip positions from hub(82,188): -->
+          <!-- 0: up       82, 146  -->
+          <!-- 1: lower-R  122, 160 -->
+          <!-- 2: right     119, 200 -->
+          <!-- 3: lower-L  44, 200  -->
+          <!-- 4: left       44, 162 -->
+
+          <!-- Spokes -->
+          <line x1="82" y1="188" x2="82"  y2="148" stroke="rgba(232,160,32,0.55)" stroke-width="1.2"/>
+          <line x1="82" y1="188" x2="122" y2="162" stroke="rgba(232,160,32,0.55)" stroke-width="1.2"/>
+          <line x1="82" y1="188" x2="118" y2="200" stroke="rgba(232,160,32,0.55)" stroke-width="1.2"/>
+          <line x1="82" y1="188" x2="46"  y2="200" stroke="rgba(232,160,32,0.55)" stroke-width="1.2"/>
+          <line x1="82" y1="188" x2="46"  y2="164" stroke="rgba(232,160,32,0.55)" stroke-width="1.2"/>
+
+          <!-- Small wheels at spoke tips -->
+          <circle cx="82"  cy="148" r="11" fill="none" stroke="#e8a020" stroke-width="1.5"/>
+          <circle cx="82"  cy="148" r="3"  fill="rgba(232,160,32,0.4)"/>
+          <circle cx="122" cy="162" r="11" fill="none" stroke="#e8a020" stroke-width="1.5"/>
+          <circle cx="122" cy="162" r="3"  fill="rgba(232,160,32,0.4)"/>
+          <circle cx="118" cy="200" r="11" fill="none" stroke="#e8a020" stroke-width="1.5" opacity="0.9"/>
+          <circle cx="118" cy="200" r="3"  fill="rgba(232,160,32,0.4)"/>
+          <!-- bottom-touching wheel highlighted -->
+          <circle cx="46"  cy="200" r="11" fill="rgba(232,160,32,0.12)" stroke="#ffc046" stroke-width="2"/>
+          <circle cx="46"  cy="200" r="3"  fill="#ffc046"/>
+          <circle cx="46"  cy="164" r="11" fill="none" stroke="#e8a020" stroke-width="1.5"/>
+          <circle cx="46"  cy="164" r="3"  fill="rgba(232,160,32,0.4)"/>
+
+          <!-- Rotation direction arc -->
+          <path d="M 100,148 A 30,30 0 0,1 116,170"
+            fill="none" stroke="rgba(232,160,32,0.5)" stroke-width="1" stroke-dasharray="3,3"
+            marker-end="url(#pw-arrow)"/>
+
+          <!-- Label: active contact wheel -->
+          <line x1="46" y1="212" x2="46" y2="228" stroke="rgba(232,160,32,0.4)" stroke-width="0.8" stroke-dasharray="2,2"/>
+          <text x="46" y="238" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="8" fill="rgba(232,160,32,0.8)">Active contact</text>
+
+          <!-- Label: hub -->
+          <text x="92" y="186" font-family="'Share Tech Mono',monospace" font-size="8" fill="rgba(79,195,247,0.8)">Hub</text>
+
+          <!-- Second wheel assembly (ghost) on step 2, showing progression -->
+          <circle cx="182" cy="152" r="4"  fill="rgba(232,160,32,0.15)" stroke="rgba(232,160,32,0.3)" stroke-width="1"/>
+          <line x1="182" y1="152" x2="182" y2="120" stroke="rgba(232,160,32,0.2)" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="182" y1="152" x2="212" y2="136" stroke="rgba(232,160,32,0.2)" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="182" y1="152" x2="208" y2="164" stroke="rgba(232,160,32,0.2)" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="182" y1="152" x2="156" y2="164" stroke="rgba(232,160,32,0.2)" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="182" y1="152" x2="156" y2="128" stroke="rgba(232,160,32,0.2)" stroke-width="1" stroke-dasharray="3,3"/>
+          <circle cx="182" cy="120" r="9" fill="none" stroke="rgba(232,160,32,0.25)" stroke-width="1" stroke-dasharray="2,2"/>
+          <circle cx="212" cy="136" r="9" fill="none" stroke="rgba(232,160,32,0.25)" stroke-width="1" stroke-dasharray="2,2"/>
+          <circle cx="208" cy="164" r="9" fill="none" stroke="rgba(232,160,32,0.25)" stroke-width="1" stroke-dasharray="2,2"/>
+          <circle cx="156" cy="164" r="9" fill="none" stroke="rgba(232,160,32,0.25)" stroke-width="1" stroke-dasharray="2,2"/>
+          <circle cx="156" cy="128" r="9" fill="none" stroke="rgba(232,160,32,0.25)" stroke-width="1" stroke-dasharray="2,2"/>
+
+          <!-- Direction arrow -->
+          <line x1="128" y1="172" x2="162" y2="158"
+            stroke="rgba(79,195,247,0.5)" stroke-width="1.2"
+            marker-end="url(#pw-arrow)"/>
+          <text x="138" y="170" font-family="'Share Tech Mono',monospace" font-size="7" fill="rgba(79,195,247,0.7)">motion</text>
+
+          <!-- Title label -->
+          <text x="160" y="16" text-anchor="middle" font-family="'Orbitron',monospace" font-size="9" fill="rgba(232,160,32,0.7)" letter-spacing="2">PENTA WHEEL MECHANISM</text>
+          <text x="160" y="28" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="7.5" fill="rgba(79,195,247,0.5)">5 sub-wheels · 72° spacing · continuous stair contact</text>
+        </svg>
+      </div>
+
+      <!-- Key highlights -->
+      <ul class="pp-highlights">
+        <li><strong>Concept:</strong> Pentagonal wheel arrangement — 5 radially mounted sub-wheels at 72° intervals, enabling step-over-step climbing without lifting the frame.</li>
+        <li><strong>Design scope:</strong> Full mechanical design including wheel hub assembly, frame geometry, seat ergonomics, and load-bearing structure modelled in CAD.</li>
+        <li><strong>Manufacturing:</strong> Fabricated using mild steel tube frame, welded joints, and machined wheel hubs; assembly and fit-out completed in-house.</li>
+        <li><strong>Performance:</strong> Successfully tested on standard staircase geometry; demonstrated stable ascent and descent with minimal jerk transfer to the occupant.</li>
+        <li><strong>Impact:</strong> Addresses a critical mobility gap for wheelchair users in buildings lacking ramp or elevator access — particularly relevant in older Indian infrastructure.</li>
+        <li><strong>Analysis:</strong> Included static load analysis, centre-of-gravity calculations, and stability assessment across stair-climbing phases.</li>
+      </ul>
+
+      <div class="pp-tags">
+        <span class="pp-tag">SolidWorks</span>
+        <span class="pp-tag">Penta Wheel</span>
+        <span class="pp-tag">Mechanism Design</span>
+        <span class="pp-tag">Fabrication</span>
+        <span class="pp-tag">Mild Steel</span>
+        <span class="pp-tag">Welded Frame</span>
+        <span class="pp-tag">Load Analysis</span>
+        <span class="pp-tag">Assistive Tech</span>
+        <span class="pp-tag">NPD</span>
+      </div>
+    </div>
+
+    <!-- ---- PLACEHOLDER FOR FUTURE PERSONAL PROJECT ---- -->
+    <div class="pp-card" style="border-style: dashed; opacity: 0.55; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:320px; text-align:center; gap:14px;">
+      <div style="font-size:2rem; opacity:0.4;">＋</div>
+      <div style="font-family:'Orbitron',monospace; font-size:0.75rem; color:var(--dim); letter-spacing:0.18em; text-transform:uppercase;">Next Personal Project</div>
+      <div style="font-family:'Share Tech Mono',monospace; font-size:0.68rem; color:var(--dim); letter-spacing:0.08em;">Currently in design phase...</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certs">
+  <div class="section-label">Achievements &amp; Learning</div>
+  <h2 class="section-title">Certifications <span>&amp; Awards</span></h2>
+  <div class="certs-grid">
+    <div class="cert-pill"><span class="cert-icon">🏅</span> Excel Certifications — Skillsoft (2023)</div>
+    <div class="cert-pill"><span class="cert-icon">🐍</span> Python Basic — HackerRank (2021)</div>
+    <div class="cert-pill"><span class="cert-icon">⚙</span> CAM &amp; Design Mfg — Autodesk Fusion 360 / Coursera (2020)</div>
+    <div class="cert-pill"><span class="cert-icon">🏭</span> Intro to Digital Manufacturing — Autodesk / Coursera (2020)</div>
+    <div class="cert-pill"><span class="cert-icon">🔧</span> Integrated CAD/CAM/CAE — Fusion 360 / Coursera (2020)</div>
+  </div>
+  <div class="award-banner">
+    <span class="award-icon">🌟</span>
+    <div class="award-text">
+      <strong>⭐ STAR OF THE MONTH — 2× RECIPIENT</strong><br>
+      Awarded twice at L&T Technology Services for outstanding performance, dedication, and exceptional service delivery.
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="section-label" style="justify-content:center">Let's Connect</div>
+    <h2 class="section-title">Get In <span>Touch</span></h2>
+    <p style="font-size:0.95rem;color:var(--dim);line-height:1.8;">
+      Open to exciting opportunities in mechanical design, product development, and engineering innovation. Let's build something great.
+    </p>
+    <div class="contact-links">
+      <a href="mailto:sm0585025@gmail.com" class="contact-link">
+        <span>✉</span> sm0585025@gmail.com
+      </a>
+      <a href="tel:+916283617908" class="contact-link">
+        <span>📞</span> +91 6283617908
+      </a>
+      <a href="https://www.linkedin.com/in/shivam-m-a52857172" target="_blank" class="contact-link">
+        <span>🔗</span> LinkedIn Profile
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  &copy; 2025 SHIVAM MISHRA &nbsp;//&nbsp; MECHANICAL DESIGN ENGINEER &nbsp;//&nbsp; BUILT WITH PRECISION
+</footer>
+
+<script>
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, gears = [], particles = [];
+
+function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+resize();
+window.addEventListener('resize', resize);
+
+class Gear {
+  constructor(x, y, r, teeth, speed, color) {
+    this.x = x; this.y = y; this.r = r; this.teeth = teeth;
+    this.speed = speed; this.angle = Math.random() * Math.PI * 2; this.color = color;
+  }
+  draw() {
+    ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.angle);
+    ctx.strokeStyle = this.color; ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    const toothH = this.r * 0.22; const n = this.teeth;
+    for (let i = 0; i < n; i++) {
+      const a1=(i/n)*Math.PI*2,a2=((i+.35)/n)*Math.PI*2,a3=((i+.65)/n)*Math.PI*2,a4=((i+1)/n)*Math.PI*2;
+      if(i===0) ctx.moveTo(Math.cos(a1)*this.r,Math.sin(a1)*this.r);
+      else ctx.lineTo(Math.cos(a1)*this.r,Math.sin(a1)*this.r);
+      ctx.lineTo(Math.cos(a2)*(this.r+toothH),Math.sin(a2)*(this.r+toothH));
+      ctx.lineTo(Math.cos(a3)*(this.r+toothH),Math.sin(a3)*(this.r+toothH));
+      ctx.lineTo(Math.cos(a4)*this.r,Math.sin(a4)*this.r);
+    }
+    ctx.closePath(); ctx.stroke();
+    ctx.beginPath(); ctx.arc(0,0,this.r*.55,0,Math.PI*2); ctx.stroke();
+    ctx.beginPath(); ctx.arc(0,0,this.r*.15,0,Math.PI*2); ctx.stroke();
+    for(let i=0;i<6;i++){const a=(i/6)*Math.PI*2;ctx.beginPath();ctx.moveTo(Math.cos(a)*this.r*.18,Math.sin(a)*this.r*.18);ctx.lineTo(Math.cos(a)*this.r*.52,Math.sin(a)*this.r*.52);ctx.stroke();}
+    ctx.restore(); this.angle += this.speed;
+  }
+}
+
+class Particle {
+  constructor(){this.reset();}
+  reset(){this.x=Math.random()*W;this.y=Math.random()*H;this.vx=(Math.random()-.5)*.4;this.vy=(Math.random()-.5)*.4;this.size=Math.random()*1.5+.5;this.alpha=Math.random()*.5+.1;}
+  update(){this.x+=this.vx;this.y+=this.vy;if(this.x<0||this.x>W||this.y<0||this.y>H)this.reset();}
+  draw(){ctx.save();ctx.globalAlpha=this.alpha;ctx.fillStyle='#4fc3f7';ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill();ctx.restore();}
+}
+
+function initScene(){
+  gears=[
+    new Gear(W*.05,H*.15,90,18,.003,'rgba(232,160,32,0.5)'),
+    new Gear(W*.22,H*.08,55,12,-.005,'rgba(232,160,32,0.35)'),
+    new Gear(W*.9,H*.85,110,22,.002,'rgba(79,195,247,0.4)'),
+    new Gear(W*.78,H*.92,65,14,-.004,'rgba(79,195,247,0.3)'),
+    new Gear(W*.95,H*.2,70,14,.006,'rgba(232,160,32,0.3)'),
+    new Gear(W*.5,H*.95,80,16,-.003,'rgba(232,160,32,0.25)'),
+    new Gear(W*.02,H*.75,50,10,.007,'rgba(79,195,247,0.3)'),
+  ];
+  particles=Array.from({length:60},()=>new Particle());
+}
+initScene(); window.addEventListener('resize',initScene);
+
+function drawBlueprintLines(){
+  ctx.save(); ctx.strokeStyle='rgba(79,195,247,0.06)'; ctx.lineWidth=1;
+  for(let y=0;y<H;y+=60){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  for(let x=0;x<W;x+=60){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  ctx.restore();
+}
+
+function animate(){ctx.clearRect(0,0,W,H);drawBlueprintLines();gears.forEach(g=>g.draw());particles.forEach(p=>{p.update();p.draw();});requestAnimationFrame(animate);}
+animate();
+
+const revealItems=document.querySelectorAll('.exp-item');
+const observer=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:.15});
+revealItems.forEach(el=>observer.observe(el));
+</script>
+</body>
+</html>
